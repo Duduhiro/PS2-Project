@@ -50,7 +50,7 @@
 	            paragrafoMensagem.innerHTML = 'Pressione o botão Novo ou selecione uma disciplina da lista:'
 	            txtId.value = '';
 	            txtNome.value = '';
-	            txtCarga.value = '';
+	            txtCarga.value = 0;
 
 	            txtId.disabled = true;
 	            txtNome.disabled = true;
@@ -110,7 +110,7 @@
 	        	
 	        	txtId.value = '';
 	        	txtNome.value = '';
-	        	txtCarga.value = '';
+	        	txtCarga.value = 0;
 	        	
 	        	txtId.disabled = true;
 	        	txtNome.disabled = false;
@@ -135,7 +135,7 @@
 	        	const URL = `/api/disciplinas`;
 	        	const dadosDisciplina = {
 	        		'nome': txtNome.value,
-	        		'carga': txtCarga.value
+	        		'cargaHoraria': txtCarga.value
 	        	};
 	        	const postRequest = {
 	        		method: 'POST',
