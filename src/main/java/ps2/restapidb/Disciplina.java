@@ -1,6 +1,12 @@
 package ps2.restapidb;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="disciplinas")
+
 public class Disciplina {
+    @Id@GeneratedValue
     private long id;
     private String nome;
     private int cargaHoraria;

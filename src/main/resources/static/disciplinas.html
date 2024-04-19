@@ -79,10 +79,10 @@
 	            for (var i = 0; i < n; i++) {
 	                var f = disciplinas[i];
 	                linhasTabela += 
-	                	`<tr><td><a href="javascript:void(0)" onclick="selecionarDisciplina('${f.id}','${f.nome}','${f.carga}')">` 
+	                	`<tr><td><a href="javascript:void(0)" onclick="selecionarDisciplina('${f.id}','${f.nome}','${f.cargaHoraria}')">` 
 	                    + f.id     + '</a></td>' + 
 	                    '<td>' + f.nome   + '</td>' +
-	                    '<td>' + f.carga + '</td></tr>\n';
+	                    '<td>' + f.cargaHoraria + '</td></tr>\n';
 	            }
 	            corpoTabela.innerHTML = linhasTabela;
 	        }
