@@ -17,39 +17,39 @@ import org.springframework.web.server.ResponseStatusException;
 public class HospedeController {
 
 	@Autowired
-	private HospedeRepo disciplinaRepo;
+	private HospedeRepo hospedeRepo;
 
-	@GetMapping("/api/disciplinas")
-	Iterable<Hospede> getDisciplinas() {
-		return disciplinaRepo.findAll();
+	@GetMapping("/api/hospedes")
+	Iterable<Hospede> getHospedes() {
+		return hospedeRepo.findAll();
 	}
 	
-	@GetMapping("/api/disciplinas/{id}")
-	Optional<Hospede> getDisciplina(@PathVariable long id) {
-		return disciplinaRepo.findById(id);
+	@GetMapping("/api/hospedes/{id}")
+	Optional<Hospede> getHospede(@PathVariable long id) {
+		return hospedeRepo.findById(id);
 	}
 	
-	@PostMapping("/api/disciplinas")
-	Hospede createDisciplina(@RequestBody Hospede d) {
-		Hospede createdDis = disciplinaRepo.save(d);
-		return createdDis;
+	@PostMapping("/api/hospedes")
+	Hospede createHospede(@RequestBody Hospede d) {
+		Hospede createdHos = hospedeRepo.save(d);
+		return createdHos;
 	}
 	
-	@PutMapping("/api/disciplinas/{disciplinaId}")
-	Optional<Hospede> updateDisciplina(@RequestBody Hospede disciplinaReq, @PathVariable long disciplinaId) {
-		Optional<Hospede> opt = disciplinaRepo.findById(disciplinaId);
+	@PutMapping("/api/hospedes/{hospedeId}")
+	Optional<Hospede> updateHospede(@RequestBody Hospede hospedeReq, @PathVariable long hospedeId) {
+		Optional<Hospede> opt = hospedeRepo.findById(hospedeId);
 		if (opt.isPresent()) {
-			if (disciplinaReq.getId() == disciplinaId) {
-				disciplinaRepo.save(disciplinaReq);
+			if (hospedeReq.getId() == hospedeId) {
+				hospedeRepo.save(hospedeReq);
 				return opt;
 			}
 		}
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro ao alterar dados da disciplina com id " + disciplinaId);
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro ao alterar dados do hóspede com id " + hospedeId);
 	}	
 	
-	@DeleteMapping("/api/disciplinas/{id}")
-	void deleteDisciplina(@PathVariable long id) {
-		disciplinaRepo.deleteById(id);
+	@DeleteMapping("/api/hospedes/{id}")
+	void deleteHospede(@PathVariable long id) {
+		hospedeRepo.deleteById(id);
 	}	
 	
 }
