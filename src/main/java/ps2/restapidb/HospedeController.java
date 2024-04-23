@@ -14,30 +14,30 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class DisciplinaController {
+public class HospedeController {
 
 	@Autowired
-	private DisciplinaRepo disciplinaRepo;
+	private HospedeRepo disciplinaRepo;
 
 	@GetMapping("/api/disciplinas")
-	Iterable<Disciplina> getDisciplinas() {
+	Iterable<Hospede> getDisciplinas() {
 		return disciplinaRepo.findAll();
 	}
 	
 	@GetMapping("/api/disciplinas/{id}")
-	Optional<Disciplina> getDisciplina(@PathVariable long id) {
+	Optional<Hospede> getDisciplina(@PathVariable long id) {
 		return disciplinaRepo.findById(id);
 	}
 	
 	@PostMapping("/api/disciplinas")
-	Disciplina createDisciplina(@RequestBody Disciplina d) {
-		Disciplina createdDis = disciplinaRepo.save(d);
+	Hospede createDisciplina(@RequestBody Hospede d) {
+		Hospede createdDis = disciplinaRepo.save(d);
 		return createdDis;
 	}
 	
 	@PutMapping("/api/disciplinas/{disciplinaId}")
-	Optional<Disciplina> updateDisciplina(@RequestBody Disciplina disciplinaReq, @PathVariable long disciplinaId) {
-		Optional<Disciplina> opt = disciplinaRepo.findById(disciplinaId);
+	Optional<Hospede> updateDisciplina(@RequestBody Hospede disciplinaReq, @PathVariable long disciplinaId) {
+		Optional<Hospede> opt = disciplinaRepo.findById(disciplinaId);
 		if (opt.isPresent()) {
 			if (disciplinaReq.getId() == disciplinaId) {
 				disciplinaRepo.save(disciplinaReq);
