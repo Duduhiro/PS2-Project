@@ -23,14 +23,14 @@
 
 			<table class="table w-25 mt-2">    
 				<tr> <td>ID:</td> <td><input class="form-control" type="text" id="txtId"></td> </tr>
-				<tr> <td>Nome:</td> <td><input class="form-control" type="text" id="txtNome"></td> </tr>
-				<tr> <td>Endereço</td> <td><input class="form-control" type="text" id="txtEndereco"></td> </tr>
-				<tr> <td>Email</td> <td><input class="form-control" type="text" id="txtEmail"></td> </tr>
-				<tr> <td>Telefone</td> <td><input class="form-control" type="text" id="txtTelefone"></td> </tr>
+				<tr> <td>Check-in:</td> <td><input class="form-control" type="date" id="txtCheckIn"></td> </tr>
+				<tr> <td>Check-out:</td> <td><input class="form-control" type="date" id="txtCheckOut"></td> </tr>
+				<tr> <td>Valor:</td> <td><input placeholder="$" class="form-control" type="number" id="txtValor"></td> </tr>
+				<tr> <td>Hóspede:</td> <td><select class="form-select" aria-label="Default select example" id="txtHospede"><option selected></option></select></select></td> </tr>
 				<tr><td></td><td>
-					<input type="button" class="btn btn-primary" value="Novo" onclick="novoHospede()" id="btnNovo">
-					<input type="button" class="btn btn-success" value="Salvar" onclick="salvarHospede()" id="btnSalvar">
-					<input type="button" class="btn btn-danger" value="Apagar" onclick="apagarHospede()" id="btnApagar">
+					<input type="button" class="btn btn-primary" value="Novo" onclick="novaReserva()" id="btnNovo">
+					<input type="button" class="btn btn-success" value="Salvar" onclick="salvarReserva()" id="btnSalvar">
+					<input type="button" class="btn btn-danger" value="Apagar" onclick="apagarReserva()" id="btnApagar">
 					<input type="button" class="btn btn-warning" value="Cancelar" onclick="cancelarEdicao()" id="btnCancelar">
 				</td></tr>
 			</table> 
@@ -40,82 +40,94 @@
 			<table class="table w-50 table-striped mt-2">    
 				<tr class="table-secondary"> 
 					<th>ID</th> 
-					<th>Nome</th> 
-					<th>Endereço</th>
-					<th>Email</th>
-					<th>Telefone</th> 
+					<th>Check-in</th> 
+					<th>Check-out</th>
+					<th>Valor</th>
+					<th>Hóspede</th>
 				</tr>
-				<tbody id="corpoTabelaHospedes"></tbody>
+				<tbody id="corpoTabelaReservas"></tbody>
 			</table>
 		</div>
         
 	    <script>
-	        const corpoTabela = document.querySelector('#corpoTabelaFaculdades');
+	        const corpoTabela = document.querySelector('#corpoTabelaReservas');
 	        const paragrafoMensagem = document.querySelector('#paragrafoMensagem');
-	        const txtNome = document.querySelector('#txtNome');
-	        const txtAno = document.querySelector('#txtAno');
+	        const txtCheckIn = document.querySelector('#txtCheckIn');
+	        const txtCheckOut = document.querySelector('#txtCheckOut');
+	        const txtValor = document.querySelector('#txtValor');
+			const txtHospede = document.querySelector('#txtHospede');
 	        const txtId = document.querySelector('#txtId');
 	        
 	        const btnNovo = document.querySelector('#btnNovo');
 	        const btnSalvar = document.querySelector('#btnSalvar');
 	        const btnApagar = document.querySelector('#btnApagar');
 	        const btnCancelar = document.querySelector('#btnCancelar');
-	        var criandoNovaFaculdade = false;
+	        var criandoNovaReserva = false;
 	        
 	        inicializar();
 
 	        function inicializar() {
-	        	criandoNovaFaculdade = false;
-	            paragrafoMensagem.innerHTML = 'Pressione o botão Novo ou selecione uma faculdade da lista:'
+	        	criandoNovaReserva = false;
+	            paragrafoMensagem.innerHTML = 'Pressione o botão Novo ou selecione uma reserva da lista:'
 	            txtId.value = '';
-	            txtNome.value = '';
-	            txtAno.value = '';
+	            txtCheckIn.value = '';
+				txtCheckOut.value = '';
+				txtValor.value = 0;
+				txtHospede.value = 0;
 
 	            txtId.disabled = true;
-	            txtNome.disabled = true;
-	            txtAno.disabled = true;
+	            txtCheckIn.disabled = true;
+				txtCheckOut.disabled = true;
+				txtValor.disabled = true;
+				txtHospede.disabled = true;
 
 	            btnNovo.disabled = false;
 	            btnSalvar.disabled = true;
 	            btnApagar.disabled = true;
 	            btnCancelar.disabled = true;
-	            listarTodasFaculdades();            
+	            listarTodasReservas();            
 	        }
 
-	        async function listarTodasFaculdades() {
-	            const URL = `/api/faculdades`;
+	        async function listarTodasReservas() {
+	            const URL = `/api/reservas`;
 	            fetch(URL)
 	              .then(resposta => { if (!resposta.ok) throw Error(resposta.status); return resposta;}) 
 	              .then(resposta => resposta.json())
 	              .then(jsonResponse => preencherTabela(jsonResponse))
-	              .catch(function(error) { paragrafoMensagem.innerHTML = "Erro ao listar faculdades (código " + error.message + ")";});
+	              .catch(function(error) { paragrafoMensagem.innerHTML = "Erro ao listar reservas (código " + error.message + ")";});
 	        }
 	        
 	        
-	        function preencherTabela(faculdades) {
+	        function preencherTabela(reservas) {
 	            var linhasTabela = '';
-	            var n = faculdades.length;
+	            var n = reservas.length;
 	            for (var i = 0; i < n; i++) {
-	                var f = faculdades[i];
+	                var f = reservas[i];
 	                linhasTabela += 
-	                	`<tr><td><a href="javascript:void(0)" onclick="selecionarFaculdade('${f.id}','${f.nome}','${f.anoFundacao}')">` 
+	                	`<tr><td><a href="javascript:void(0)" onclick="selecionarReserva('${f.id}','${f.checkIn}','${f.checkOut}','${f.valor}','${f.hospede}')">` 
 	                    + f.id     + '</a></td>' + 
-	                    '<td>' + f.nome   + '</td>' +
-	                    '<td>' + f.anoFundacao + '</td></tr>\n';
+	                    '<td>' + f.checkIn   + '</td>' +
+	                    '<td>' + f.checkOut + '</td>' +
+	                    '<td>' + f.valor + '</td>' +
+	                    '<td>' + f.hospede + '</td> </tr>\n';
 	            }
 	            corpoTabela.innerHTML = linhasTabela;
 	        }
 
-	        function selecionarFaculdade(id, nome, anoFundacao) {
-	        	criandoNovaFaculdade = false;
-	            paragrafoMensagem.innerHTML = 'Altere e salve os dados da faculdader, ou então apague o registro da faculdade.'
+	        function selecionarReserva(id, checkIn, checkOut, valor, hospede) {
+	        	criandoNovaReserva = false;
+	            paragrafoMensagem.innerHTML = 'Altere e salve os dados da reserva, ou então apague o registro da reserva.'
 	            txtId.value = id;
-	            txtNome.value = nome;
-	            txtAno.value = anoFundacao;
+	            txtCheckIn.value = checkIn;
+				txtCheckOut.value = checkOut;
+				txtValor.value = valor;
+				txtHospede.value = hospede;
 
 	            txtId.disabled = true;
-	            txtNome.disabled = false;
-	            txtAno.disabled = false;
+	            txtCheckIn.disabled = false;
+				txtCheckOut.disabled = false;
+				txtValor.disabled = false;
+				txtHospede.disabled = false;
 
 	            btnNovo.disabled = true;
 	            btnSalvar.disabled = false;
@@ -123,17 +135,21 @@
 	            btnCancelar.disabled = false;  
 	        }
 
-	        function novaFaculdade() {
-	        	paragrafoMensagem.innerHTML = 'Preencha os dados da nova faculdade...';
-	        	criandoNovaFaculdade = true;
+	        function novaReserva() {
+	        	paragrafoMensagem.innerHTML = 'Preencha os dados da nova reserva...';
+	        	criandoNovaReserva = true;
 	        	
 	        	txtId.value = '';
-	        	txtNome.value = '';
-	        	txtAno.value = '';
+	        	txtCheckIn.value = '';
+				txtCheckOut.value = '';
+				txtValor.value = 0;
+				txtHospede.value = 0;
 	        	
 	        	txtId.disabled = true;
-	        	txtNome.disabled = false;
-	        	txtAno.disabled = false;
+	        	txtCheckIn.disabled = false;
+				txtCheckOut.disabled = false;
+				txtValor.disabled = false;
+				txtHospede.disabled = false;
 	        	
 	        	btnNovo.disabled = true;
 	        	btnSalvar.disabled = false;
@@ -141,67 +157,71 @@
 	        	btnCancelar.disabled = false;
 	        }
 	        
-	        function salvarFaculdade() {
-	        	if (criandoNovaFaculdade) {
-	        		criarFaculdade();
+	        function salvarReserva() {
+	        	if (criandoNovaReserva) {
+	        		criarReserva();
 	        	}
 	        	else {
-	        		alterarFaculdade();
+	        		alterarReserva();
 	        	}
 	        }
 	        
-	        async function criarFaculdade() {
-	        	const URL = `/api/faculdades`;
-	        	const dadosFaculdade = {
-	        		'nome': txtNome.value,
-	        		'anoFundacao': txtAno.value
+	        async function criarReserva() {
+	        	const URL = `/api/reservas`;
+	        	const dadosReserva = {
+	        		'checkIn': txtCheckIn.value,
+					'checkOut': txtCheckOut.value,
+					'valor': txtValor.value,
+					'hospede': txtHospede.value
 	        	};
 	        	const postRequest = {
 	        		method: 'POST',
-	        		body: JSON.stringify(dadosFaculdade),
+	        		body: JSON.stringify(dadosReserva),
 	        		headers: { 'Content-type': 'application/json' }
 	        	};
 	        	fetch(URL, postRequest)
 	        		.then(resposta => { if (!resposta.ok) throw Error(resposta.status); return resposta; } )
 	        		.then(resposta => resposta.json())
 	        		.then(jsonResponse => inicializar())
-	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao criar nova faculdade (código ' + error.message + ')'; } );
+	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao criar nova reserva (código ' + error.message + ')'; } );
 	        }
 	        
-	        async function alterarFaculdade() {
+	        async function alterarReserva() {
 	        	const ID = txtId.value;
-	        	const URL = `/api/faculdades/${ID}`;
-	        	const dadosFaculdade = {
+	        	const URL = `/api/reservas/${ID}`;
+	        	const dadosReserva = {
 	        		'id': ID,
-	        		'nome': txtNome.value,
-	        		'anoFundacao': txtAno.value
+	        		'checkIn': txtCheckIn.value,
+					'checkOut': txtCheckOut.value,
+					'valor': txtValor.value,
+					'hospede': txtHospede.value
 	        	};
 	        	const putRequest = {
 	        		method: 'PUT',
-	        		body: JSON.stringify(dadosFaculdade),
+	        		body: JSON.stringify(dadosReserva),
 	        		headers: { 'Content-type': 'application/json' }
 	        	};
 	        	fetch(URL, putRequest)
 	        		.then(resposta => { if (!resposta.ok) throw Error(resposta.status); return resposta; } )
 	        		.then(resposta => resposta.json())
 	        		.then(jsonResponse => inicializar())
-	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao alterar faculdade (código ' + error.message + ')'; } );	        	
+	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao alterar reserva (código ' + error.message + ')'; } );	        	
 	        }
 	        
 	        function cancelarEdicao() {
 	        	inicializar();
 	        }
 	        
-	        async function apagarFaculdade() {
+	        async function apagarReserva() {
 	        	const ID = txtId.value;
-	        	const URL = `/api/faculdades/${ID}`;
+	        	const URL = `/api/reservas/${ID}`;
 	        	const deleteRequest = {
 	        		method: 'DELETE'
 	        	};
 	        	fetch(URL, deleteRequest)
 	        		.then(resposta => { if (!resposta.ok) throw Error(resposta.status); return resposta; } )
 	        		.then(resposta => inicializar())
-	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao apagar faculdade (código ' + error.message + ')'; } );	        		
+	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao apagar reserva (código ' + error.message + ')'; } );	        		
 	        }
 	        
 	    </script>    
