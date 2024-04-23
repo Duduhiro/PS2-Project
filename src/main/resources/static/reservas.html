@@ -26,7 +26,7 @@
 				<tr> <td>Check-in:</td> <td><input class="form-control" type="date" id="txtCheckIn"></td> </tr>
 				<tr> <td>Check-out:</td> <td><input class="form-control" type="date" id="txtCheckOut"></td> </tr>
 				<tr> <td>Valor:</td> <td><input placeholder="$" class="form-control" type="number" id="txtValor"></td> </tr>
-				<tr> <td>Hóspede:</td> <td><select class="form-select" aria-label="Default select example" id="txtHospede"><option selected></option></select></select></td> </tr>
+				<tr> <td>Hóspede:</td> <td><select class="form-select" aria-label="Default select example" id="txtHospede"><option selected value="-1"></option></select></select></td> </tr>
 				<tr><td></td><td>
 					<input type="button" class="btn btn-primary" value="Novo" onclick="novaReserva()" id="btnNovo">
 					<input type="button" class="btn btn-success" value="Salvar" onclick="salvarReserva()" id="btnSalvar">
@@ -58,6 +58,8 @@
 			const txtHospede = document.querySelector('#txtHospede');
 	        const txtId = document.querySelector('#txtId');
 	        
+			var hospedes;
+
 	        const btnNovo = document.querySelector('#btnNovo');
 	        const btnSalvar = document.querySelector('#btnSalvar');
 	        const btnApagar = document.querySelector('#btnApagar');
@@ -73,7 +75,11 @@
 	            txtCheckIn.value = '';
 				txtCheckOut.value = '';
 				txtValor.value = 0;
-				txtHospede.value = 0;
+				txtHospede.value = '';
+
+				while (txtHospede.lastChild.value != -1) {
+					txtHospede.removeChild(txtHospede.lastChild);
+				}
 
 	            txtId.disabled = true;
 	            txtCheckIn.disabled = true;
@@ -85,7 +91,24 @@
 	            btnSalvar.disabled = true;
 	            btnApagar.disabled = true;
 	            btnCancelar.disabled = true;
+				listarTodosHospedes();
 	            listarTodasReservas();            
+	        }
+
+			async function listarTodosHospedes() {
+	            const URL = `/api/hospedes`;
+	            fetch(URL)
+	              .then(resposta => { if (!resposta.ok) throw Error(resposta.status); return resposta;}) 
+	              .then(resposta => resposta.json())
+	              .then(data => {
+					data.forEach(element => {
+						const option = document.createElement('option');
+						option.value = element.id + ' - ' +  element.nome;
+						option.textContent = element.id + ' - ' +  element.nome;
+						txtHospede.appendChild(option);
+					});
+				  })
+	              .catch(function(error) { paragrafoMensagem.innerHTML = "Erro ao listar hóspedes (código " + error.message + ")";});
 	        }
 
 	        async function listarTodasReservas() {
@@ -104,12 +127,12 @@
 	            for (var i = 0; i < n; i++) {
 	                var f = reservas[i];
 	                linhasTabela += 
-	                	`<tr><td><a href="javascript:void(0)" onclick="selecionarReserva('${f.id}','${f.checkIn}','${f.checkOut}','${f.valor}','${f.hospede}')">` 
+	                	`<tr><td><a href="javascript:void(0)" onclick="selecionarReserva('${f.id}','${f.dataCheckIn}','${f.dataCheckOut}','${f.valorReserva}','${f.id_hospede}')">` 
 	                    + f.id     + '</a></td>' + 
-	                    '<td>' + f.checkIn   + '</td>' +
-	                    '<td>' + f.checkOut + '</td>' +
-	                    '<td>' + f.valor + '</td>' +
-	                    '<td>' + f.hospede + '</td> </tr>\n';
+	                    '<td>' + f.dataCheckIn + '</td>' +
+	                    '<td>' + f.dataCheckOut + '</td>' +
+	                    '<td>' + f.valorReserva + '</td>' +
+	                    '<td>' + f.id_hospede + '</td> </tr>\n';
 	            }
 	            corpoTabela.innerHTML = linhasTabela;
 	        }
@@ -143,7 +166,7 @@
 	        	txtCheckIn.value = '';
 				txtCheckOut.value = '';
 				txtValor.value = 0;
-				txtHospede.value = 0;
+				txtHospede.value = '';
 	        	
 	        	txtId.disabled = true;
 	        	txtCheckIn.disabled = false;
@@ -169,10 +192,10 @@
 	        async function criarReserva() {
 	        	const URL = `/api/reservas`;
 	        	const dadosReserva = {
-	        		'checkIn': txtCheckIn.value,
-					'checkOut': txtCheckOut.value,
-					'valor': txtValor.value,
-					'hospede': txtHospede.value
+	        		'dataCheckIn': txtCheckIn.value,
+					'dataCheckOut': txtCheckOut.value,
+					'valorReserva': txtValor.value,
+					'id_hospede': txtHospede.value
 	        	};
 	        	const postRequest = {
 	        		method: 'POST',
@@ -191,10 +214,10 @@
 	        	const URL = `/api/reservas/${ID}`;
 	        	const dadosReserva = {
 	        		'id': ID,
-	        		'checkIn': txtCheckIn.value,
-					'checkOut': txtCheckOut.value,
-					'valor': txtValor.value,
-					'hospede': txtHospede.value
+	        		'dataCheckIn': txtCheckIn.value,
+					'dataCheckOut': txtCheckOut.value,
+					'valorReserva': txtValor.value,
+					'id_hospede': txtHospede.value
 	        	};
 	        	const putRequest = {
 	        		method: 'PUT',

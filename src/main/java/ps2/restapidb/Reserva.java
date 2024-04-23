@@ -10,7 +10,7 @@ public class Reserva {
 	private String dataCheckIn;
 	private String dataCheckOut;
 	private double valorReserva;
-	private long id_hospede;
+	private String id_hospede;
 		
 	public Reserva() {
 		super();
@@ -34,10 +34,10 @@ public class Reserva {
 	public String getDataCheckOut() {
 		return dataCheckOut;
 	}
-	public void setId_hospede(long id_hospede) {
+	public void setId_hospede(String id_hospede) {
 		this.id_hospede = id_hospede;
 	}
-	public long getId_hospede() {
+	public String getId_hospede() {
 		return id_hospede;
 	}
 	public void setValorReserva(double valorReserva) {
