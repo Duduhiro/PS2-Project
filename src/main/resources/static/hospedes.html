@@ -18,18 +18,18 @@
 
 
 		<div class="container-fluid d-flex flex-column align-items-center">
-			<h1>Gerenciamento de Disciplinas</h1>
+			<h1>Gerenciamento de hóspedes</h1>
 
 			<table class="table w-25 mt-2">    
 				<tr> <td>ID:</td> <td><input class="form-control" type="text" id="txtId"></td> </tr>
 				<tr> <td>Nome:</td> <td><input class="form-control" type="text" id="txtNome"></td> </tr>
-				<tr> <td>Endereço</td> <td><input class="form-control" type="text" id="txtCarga"></td> </tr>
-				<tr> <td>Email</td> <td><input class="form-control" type="text" id="txtCarga"></td> </tr>
-				<tr> <td>Telefone</td> <td><input class="form-control" type="text" id="txtCarga"></td> </tr>
+				<tr> <td>Endereço</td> <td><input class="form-control" type="text" id="txtEndereco"></td> </tr>
+				<tr> <td>Email</td> <td><input class="form-control" type="text" id="txtEmail"></td> </tr>
+				<tr> <td>Telefone</td> <td><input class="form-control" type="text" id="txtTelefone"></td> </tr>
 				<tr><td></td><td>
-					<input type="button" class="btn btn-primary" value="Novo" onclick="novaDisciplina()" id="btnNovo">
-					<input type="button" class="btn btn-success" value="Salvar" onclick="salvarDisciplina()" id="btnSalvar">
-					<input type="button" class="btn btn-danger" value="Apagar" onclick="apagarDisciplina()" id="btnApagar">
+					<input type="button" class="btn btn-primary" value="Novo" onclick="novoHospede()" id="btnNovo">
+					<input type="button" class="btn btn-success" value="Salvar" onclick="salvarHospede()" id="btnSalvar">
+					<input type="button" class="btn btn-danger" value="Apagar" onclick="apagarHospede()" id="btnApagar">
 					<input type="button" class="btn btn-warning" value="Cancelar" onclick="cancelarEdicao()" id="btnCancelar">
 				</td></tr>
 			</table> 
@@ -44,77 +44,90 @@
 					<th>Email</th>
 					<th>Telefone</th> 
 				</tr>
-				<tbody id="corpoTabelaDisciplinas"></tbody>
+				<tbody id="corpoTabelaHospedes"></tbody>
 			</table>
 		</div>
         
 	    <script>
-	        const corpoTabela = document.querySelector('#corpoTabelaDisciplinas');
+	        const corpoTabela = document.querySelector('#corpoTabelaHospedes');
 	        const paragrafoMensagem = document.querySelector('#paragrafoMensagem');
 	        const txtNome = document.querySelector('#txtNome');
-	        const txtCarga = document.querySelector('#txtCarga');
+	        const txtEndereco = document.querySelector('#txtEndereco');
+	        const txtEmail = document.querySelector('#txtEmail');
+	        const txtTelefone = document.querySelector('#txtTelefone');
+
 	        const txtId = document.querySelector('#txtId');
 	        
 	        const btnNovo = document.querySelector('#btnNovo');
 	        const btnSalvar = document.querySelector('#btnSalvar');
 	        const btnApagar = document.querySelector('#btnApagar');
 	        const btnCancelar = document.querySelector('#btnCancelar');
-	        var criandoNovaDisciplina = false;
+	        var criandoNovoHospede = false;
 	        
 	        inicializar();
 
 	        function inicializar() {
-	        	criandoNovaDisciplina = false;
+	        	criandoNovoHospede = false;
 	            paragrafoMensagem.innerHTML = 'Pressione o botão Novo ou selecione uma disciplina da lista:'
 	            txtId.value = '';
 	            txtNome.value = '';
-	            txtCarga.value = 0;
+	            txtEndereco.value = '';
+				txtEmail.value = '';
+				txtTelefone.value = '';
 
 	            txtId.disabled = true;
 	            txtNome.disabled = true;
-	            txtCarga.disabled = true;
+	            txtEndereco.disabled = true;
+				txtEmail.disabled = true;
+				txtTelefone.disabled = true;
 
 	            btnNovo.disabled = false;
 	            btnSalvar.disabled = true;
 	            btnApagar.disabled = true;
 	            btnCancelar.disabled = true;
-	            listarTodasDisciplinas();            
+	            listarTodosHospedes();            
 	        }
 
-	        async function listarTodasDisciplinas() {
-	            const URL = `/api/disciplinas`;
+	        async function listarTodosHospedes() {
+	            const URL = `/api/hospedes`;
 	            fetch(URL)
 	              .then(resposta => { if (!resposta.ok) throw Error(resposta.status); return resposta;}) 
 	              .then(resposta => resposta.json())
 	              .then(jsonResponse => preencherTabela(jsonResponse))
-	              .catch(function(error) { paragrafoMensagem.innerHTML = "Erro ao listar disciplinas (código " + error.message + ")";});
+	              .catch(function(error) { paragrafoMensagem.innerHTML = "Erro ao listar hóspedes (código " + error.message + ")";});
 	        }
 	        
 	        
-	        function preencherTabela(disciplinas) {
+	        function preencherTabela(hospedes) {
 	            var linhasTabela = '';
-	            var n = disciplinas.length;
+	            var n = hospedes.length;
 	            for (var i = 0; i < n; i++) {
-	                var f = disciplinas[i];
+	                var f = hospedes[i];
 	                linhasTabela += 
-	                	`<tr><td><a href="javascript:void(0)" onclick="selecionarDisciplina('${f.id}','${f.nome}','${f.cargaHoraria}')">` 
+	                	`<tr><td><a href="javascript:void(0)" onclick="selecionarHospede('${f.id}','${f.nome}','${f.endereco}','${f.email}','${f.telefone}')">` 
 	                    + f.id     + '</a></td>' + 
 	                    '<td>' + f.nome   + '</td>' +
-	                    '<td>' + f.cargaHoraria + '</td></tr>\n';
+	                    '<td>' + f.endereco + '</td>' +
+	                    '<td>' + f.email + '</td>' +
+	                    '<td>' + f.telefone + '</td></tr>\n';
 	            }
 	            corpoTabela.innerHTML = linhasTabela;
 	        }
 
-	        function selecionarDisciplina(id, nome, cargaHoraria) {
-	        	criandoNovaDisciplina = false;
-	            paragrafoMensagem.innerHTML = 'Altere e salve os dados da disciplina, ou então apague o registro da disciplina.'
+	        function selecionarHospede(id, nome, endereco, email, telefone) {
+	        	criandoNovoHospede = false;
+	            paragrafoMensagem.innerHTML = 'Altere e salve os dados do hóspede, ou então apague o registro do hóspede.'
 	            txtId.value = id;
 	            txtNome.value = nome;
-	            txtCarga.value = cargaHoraria;
+	            txtEndereco.value = endereco;
+				txtEmail.value = email;
+				txtTelefone.value = telefone;
 
 	            txtId.disabled = true;
 	            txtNome.disabled = false;
-	            txtCarga.disabled = false;
+	            txtEndereco.disabled = false;
+	            txtEmail.disabled = false;
+	            txtTelefone.disabled = false;
 
 	            btnNovo.disabled = true;
 	            btnSalvar.disabled = false;
@@ -122,17 +135,21 @@
 	            btnCancelar.disabled = false;  
 	        }
 
-	        function novaDisciplina() {
-	        	paragrafoMensagem.innerHTML = 'Preencha os dados da nova disciplina...';
-	        	criandoNovaDisciplina = true;
+	        function novoHospede() {
+	        	paragrafoMensagem.innerHTML = 'Preencha os dados do novo hóspede...';
+	        	criandoNovoHospede = true;
 	        	
 	        	txtId.value = '';
 	        	txtNome.value = '';
-	        	txtCarga.value = 0;
+	        	txtEndereco.value = '';
+				txtEmail.value = '';
+				txtTelefone.value = '';
 	        	
 	        	txtId.disabled = true;
 	        	txtNome.disabled = false;
-	        	txtCarga.disabled = false;
+	        	txtEndereco.disabled = false;
+				txtEmail.disabled = false;
+				txtTelefone.disabled = false;
 	        	
 	        	btnNovo.disabled = true;
 	        	btnSalvar.disabled = false;
@@ -140,67 +157,71 @@
 	        	btnCancelar.disabled = false;
 	        }
 	        
-	        function salvarDisciplina() {
-	        	if (criandoNovaDisciplina) {
-	        		criarDisciplina();
+	        function salvarHospede() {
+	        	if (criandoNovoHospede) {
+	        		criarHospede();
 	        	}
 	        	else {
-	        		alterarDisciplina();
+	        		alterarHospede();
 	        	}
 	        }
 	        
-	        async function criarDisciplina() {
-	        	const URL = `/api/disciplinas`;
-	        	const dadosDisciplina = {
+	        async function criarHospede() {
+	        	const URL = `/api/hospedes`;
+	        	const dadosHospede = {
 	        		'nome': txtNome.value,
-	        		'cargaHoraria': txtCarga.value
+	        		'endereco': txtEndereco.value,
+					'email': txtEmail.value,
+					'telefone': txtTelefone.value
 	        	};
 	        	const postRequest = {
 	        		method: 'POST',
-	        		body: JSON.stringify(dadosDisciplina),
+	        		body: JSON.stringify(dadosHospede),
 	        		headers: { 'Content-type': 'application/json' }
 	        	};
 	        	fetch(URL, postRequest)
 	        		.then(resposta => { if (!resposta.ok) throw Error(resposta.status); return resposta; } )
 	        		.then(resposta => resposta.json())
 	        		.then(jsonResponse => inicializar())
-	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao criar nova disciplina (código ' + error.message + ')'; } );
+	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao criar novo hóspede (código ' + error.message + ')'; } );
 	        }
 	        
-	        async function alterarDsciplina() {
+	        async function alterarHospede() {
 	        	const ID = txtId.value;
-	        	const URL = `/api/disciplinas/${ID}`;
-	        	const dadosDisciplina = {
+	        	const URL = `/api/hospedes/${ID}`;
+	        	const dadosHospede = {
 	        		'id': ID,
 	        		'nome': txtNome.value,
-	        		'carga': txtCarga.value
+	        		'endereco': txtEndereco.value,
+					'email': txtEmail.value,
+					'telefone': txtTelefone.value
 	        	};
 	        	const putRequest = {
 	        		method: 'PUT',
-	        		body: JSON.stringify(dadosDisciplina),
+	        		body: JSON.stringify(dadosHospede),
 	        		headers: { 'Content-type': 'application/json' }
 	        	};
 	        	fetch(URL, putRequest)
 	        		.then(resposta => { if (!resposta.ok) throw Error(resposta.status); return resposta; } )
 	        		.then(resposta => resposta.json())
 	        		.then(jsonResponse => inicializar())
-	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao alterar disciplina (código ' + error.message + ')'; } );	        	
+	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao alterar hóspede (código ' + error.message + ')'; } );	        	
 	        }
 	        
 	        function cancelarEdicao() {
 	        	inicializar();
 	        }
 	        
-	        async function apagarDisciplina() {
+	        async function apagarHospede() {
 	        	const ID = txtId.value;
-	        	const URL = `/api/disciplinas/${ID}`;
+	        	const URL = `/api/hospedes/${ID}`;
 	        	const deleteRequest = {
 	        		method: 'DELETE'
 	        	};
 	        	fetch(URL, deleteRequest)
 	        		.then(resposta => { if (!resposta.ok) throw Error(resposta.status); return resposta; } )
 	        		.then(resposta => inicializar())
-	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao apagar disciplina (código ' + error.message + ')'; } );	        		
+	        		.catch(function(error) { paragrafoMensagem.innerHTML = 'Erro ao apagar hóspede (código ' + error.message + ')'; } );	        		
 	        }
 	        
 	    </script>    
