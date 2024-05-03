@@ -7,7 +7,7 @@
         <meta charset="UTF-8">
 		<link href="./styles/index.css" rel="stylesheet">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    </head>
-    
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <body>
 
 		<header class="p-2 ps-3 container-fluid d-flex align-items-center bg-light" style="gap: 20px; width: 100%" >
@@ -20,19 +20,34 @@
 		<div class="container-fluid d-flex flex-column align-items-center">
 			<h1>Gerenciamento de hóspedes</h1>
 
-			<table class="table w-25 mt-2">    
-				<tr> <td>ID:</td> <td><input class="form-control" type="text" id="txtId"></td> </tr>
-				<tr> <td>Nome:</td> <td><input class="form-control" type="text" id="txtNome"></td> </tr>
-				<tr> <td>Endereço</td> <td><input class="form-control" type="text" id="txtEndereco"></td> </tr>
-				<tr> <td>Email</td> <td><input class="form-control" type="text" id="txtEmail"></td> </tr>
-				<tr> <td>Telefone</td> <td><input class="form-control" type="text" id="txtTelefone"></td> </tr>
-				<tr><td></td><td>
+			<form class="container-sm w-50 row mb-4 g-3 needs-validation" novalidate>
+				<div class="col-md-2">
+					<label for="txtId" class="form-label">ID</label>
+					<input type="text" class="form-control" id="txtId" required>
+				</div>
+				<div class="col-md-10">
+					<label for="txtNome" class="form-label">Nome</label>
+					<input type="text" class="form-control" id="txtNome" required>
+				</div>
+				<div class="col-md-12">
+					<label for="txtEndereco" class="form-label">Endereço</label>
+					<input type="text" class="form-control" id="txtEndereco" required>
+				</div>
+				<div class="col-md-8">
+					<label for="txtEmail" class="form-label">Email</label>
+					<input type="email" class="form-control" id="txtEmail" required>
+				</div>
+				<div class="col-md-4">
+					<label for="txtTelefone" class="form-label">Telefone</label>
+					<input type="tel" class="form-control" id="txtTelefone" required>
+				</div>
+				<div class="col-md-12 mt-4 text-center">
 					<input type="button" class="btn btn-primary" value="Novo" onclick="novoHospede()" id="btnNovo">
 					<input type="button" class="btn btn-success" value="Salvar" onclick="salvarHospede()" id="btnSalvar">
 					<input type="button" class="btn btn-danger" value="Apagar" onclick="apagarHospede()" id="btnApagar">
 					<input type="button" class="btn btn-warning" value="Cancelar" onclick="cancelarEdicao()" id="btnCancelar">
-				</td></tr>
-			</table> 
+				</div>
+			</form>
 			
 			<p style="font-weight:bold" id="paragrafoMensagem"></p>
 			
@@ -87,6 +102,16 @@
 	            btnCancelar.disabled = true;
 	            listarTodosHospedes();            
 	        }
+
+			function validarForm() {
+				var form = document.querySelector('form');
+				if (form.checkValidity()) {
+					return true;
+				} else {
+					form.classList.add('was-validated');
+					return false;
+				}
+			}
 
 	        async function listarTodosHospedes() {
 	            const URL = `/api/hospedes`;
@@ -158,6 +183,13 @@
 	        }
 	        
 	        function salvarHospede() {
+
+				let continuar = validarForm();
+
+				if (!continuar) {
+					return;
+				}
+
 	        	if (criandoNovoHospede) {
 	        		criarHospede();
 	        	}
@@ -167,6 +199,9 @@
 	        }
 	        
 	        async function criarHospede() {
+
+				
+
 	        	const URL = `/api/hospedes`;
 	        	const dadosHospede = {
 	        		'nome': txtNome.value,
