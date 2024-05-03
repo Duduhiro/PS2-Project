@@ -28,18 +28,30 @@
 				<div class="col-md-10">
 					<label for="txtNome" class="form-label">Nome</label>
 					<input type="text" class="form-control" id="txtNome" required>
+					<div class="invalid-feedback">
+						Insira um nome.
+					</div>
 				</div>
 				<div class="col-md-12">
 					<label for="txtEndereco" class="form-label">Endereço</label>
 					<input type="text" class="form-control" id="txtEndereco" required>
+					<div class="invalid-feedback">
+						Insira um endereço.
+					</div>
 				</div>
 				<div class="col-md-8">
 					<label for="txtEmail" class="form-label">Email</label>
 					<input type="email" class="form-control" id="txtEmail" required>
+					<div class="invalid-feedback">
+						Insira um email válido.
+					</div>
 				</div>
 				<div class="col-md-4">
 					<label for="txtTelefone" class="form-label">Telefone</label>
 					<input type="tel" class="form-control" id="txtTelefone" required>
+					<div class="invalid-feedback">
+						Insira um telefone.
+					</div>
 				</div>
 				<div class="col-md-12 mt-4 text-center">
 					<input type="button" class="btn btn-primary" value="Novo" onclick="novoHospede()" id="btnNovo">
@@ -184,9 +196,7 @@
 	        
 	        function salvarHospede() {
 
-				let continuar = validarForm();
-
-				if (!continuar) {
+				if(!validarForm()) {
 					return;
 				}
 
