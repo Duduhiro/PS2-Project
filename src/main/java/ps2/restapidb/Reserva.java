@@ -10,8 +10,10 @@ public class Reserva {
 	private String dataCheckIn;
 	private String dataCheckOut;
 	private double valorReserva;
-	private String id_hospede;
-		
+	
+	@ManyToOne(fetch=FetchType.EAGER, optional=false)
+	private Hospede hospede;
+
 	public Reserva() {
 		super();
 	}
@@ -34,17 +36,17 @@ public class Reserva {
 	public String getDataCheckOut() {
 		return dataCheckOut;
 	}
-	public void setId_hospede(String id_hospede) {
-		this.id_hospede = id_hospede;
-	}
-	public String getId_hospede() {
-		return id_hospede;
-	}
 	public void setValorReserva(double valorReserva) {
 		this.valorReserva = valorReserva;
 	}
 	public double getValorReserva() {
 		return valorReserva;
+	}
+	public Hospede getHospede() {
+		return hospede;
+	}
+	public void setHospede(Hospede hospede) {
+		this.hospede = hospede;
 	}
 
 }

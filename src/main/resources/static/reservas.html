@@ -129,7 +129,7 @@
 	            txtCheckIn.value = '';
 				txtCheckOut.value = '';
 				txtValor.value = null;
-				txtHospede.value = '';
+				txtHospede.value = -1;
 
 				while (txtHospede.lastChild.value != -1) {
 					txtHospede.removeChild(txtHospede.lastChild);
@@ -164,7 +164,7 @@
 				var form = document.querySelector('form');
 
 				if (form.checkValidity()) {
-					if (txtHospede.value == 1) {
+					if (txtHospede.value == -1) {
 						return false;
 					}
 					return true;
@@ -182,7 +182,7 @@
 	              .then(data => {
 					data.forEach(element => {
 						const option = document.createElement('option');
-						option.value = element.id + ' - ' +  element.nome;
+						option.value = element.id;
 						option.textContent = element.id + ' - ' +  element.nome;
 						txtHospede.appendChild(option);
 					});
@@ -206,12 +206,12 @@
 	            for (var i = 0; i < n; i++) {
 	                var f = reservas[i];
 	                linhasTabela += 
-	                	`<tr><td class="ps-3"><a href="javascript:void(0)" onclick="selecionarReserva('${f.id}','${f.dataCheckIn}','${f.dataCheckOut}','${f.valorReserva}','${f.id_hospede}')">` 
+	                	`<tr><td class="ps-3"><a href="javascript:void(0)" onclick="selecionarReserva('${f.id}','${f.dataCheckIn}','${f.dataCheckOut}','${f.valorReserva}','${f.hospede.id}')">` 
 	                    + f.id     + '</a></td>' + 
 	                    '<td>' + f.dataCheckIn + '</td>' +
 	                    '<td>' + f.dataCheckOut + '</td>' +
 	                    '<td>R$ ' + f.valorReserva + ',00</td>' +
-	                    '<td><a href="./hospedes.html">' + f.id_hospede + '</a></td> </tr>\n';
+	                    '<td><a href="./hospedes.html">' + f.hospede.id + ' - ' + f.hospede.nome + '</a></td> </tr>\n';
 	            }
 	            corpoTabela.innerHTML = linhasTabela;
 	        }
@@ -286,7 +286,7 @@
 	        		'dataCheckIn': cInDate,
 					'dataCheckOut': cOutDate,
 					'valorReserva': txtValor.value,
-					'id_hospede': txtHospede.value
+					'hospede': {'id': txtHospede.value}
 	        	};
 	        	const postRequest = {
 	        		method: 'POST',
@@ -315,7 +315,7 @@
 	        		'dataCheckIn': cInDate,
 					'dataCheckOut': cOutDate,
 					'valorReserva': txtValor.value,
-					'id_hospede': txtHospede.value
+					'hospede': {'id': txtHospede.value}
 	        	};
 	        	const putRequest = {
 	        		method: 'PUT',
