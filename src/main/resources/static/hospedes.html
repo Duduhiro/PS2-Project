@@ -7,45 +7,87 @@
         <meta charset="UTF-8">
 		<link href="./styles/index.css" rel="stylesheet">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    </head>
-    
-    <body>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+		<style>
+			body, html {
+				height: 100%;
+			}
+		</style>	
+	<body class="d-flex flex-column">
 
-		<header class="p-2 ps-3 container-fluid d-flex align-items-center bg-light" style="gap: 20px; width: 100%" >
+		<header class="p-3 ps-3 container-fluid d-flex align-items-center bg-light" style="gap: 20px" >
 			<h1><a href="./index.html" class="text-reset text-decoration-none">Hotel MackDorms</a></h1>
 			<a href="hospedes.html" class="fs-3 text-secondary text-decoration-none ">Hóspedes</a>
 			<a href="reservas.html" class="fs-3 text-secondary text-decoration-none ">Reservas</a>
 		</header>
 
-
-		<div class="container-fluid d-flex flex-column align-items-center">
-			<h1>Gerenciamento de hóspedes</h1>
-
-			<table class="table w-25 mt-2">    
-				<tr> <td>ID:</td> <td><input class="form-control" type="text" id="txtId"></td> </tr>
-				<tr> <td>Nome:</td> <td><input class="form-control" type="text" id="txtNome"></td> </tr>
-				<tr> <td>Endereço</td> <td><input class="form-control" type="text" id="txtEndereco"></td> </tr>
-				<tr> <td>Email</td> <td><input class="form-control" type="text" id="txtEmail"></td> </tr>
-				<tr> <td>Telefone</td> <td><input class="form-control" type="text" id="txtTelefone"></td> </tr>
-				<tr><td></td><td>
-					<input type="button" class="btn btn-primary" value="Novo" onclick="novoHospede()" id="btnNovo">
-					<input type="button" class="btn btn-success" value="Salvar" onclick="salvarHospede()" id="btnSalvar">
-					<input type="button" class="btn btn-danger" value="Apagar" onclick="apagarHospede()" id="btnApagar">
-					<input type="button" class="btn btn-warning" value="Cancelar" onclick="cancelarEdicao()" id="btnCancelar">
-				</td></tr>
-			</table> 
+		<div class="container-fluid d-flex flex-column align-items-center ps-0 pe-0 flex-grow-1">
 			
-			<p style="font-weight:bold" id="paragrafoMensagem"></p>
-			
-			<table class="table w-50 table-striped mt-2">    
-				<tr class="table-secondary"> 
-					<th>ID</th> 
-					<th>Nome</th> 
-					<th>Endereço</th>
-					<th>Email</th>
-					<th>Telefone</th> 
-				</tr>
-				<tbody id="corpoTabelaHospedes"></tbody>
-			</table>
+			<div class="container-fluid row pt-0 ps-0 pe-0 border-end-0 shadow" style="height: 100%;">
+				<div class="col-md-4 pt-3 ps-4 pe-4" style="background-color: #212529;">
+					<div class="container text-center text-white">
+						<h1>Gerenciamento de hóspedes</h1>
+					</div>
+					<form class="row mb-4 g-3 needs-validation" novalidate>
+						<div class="col-md-2">
+							<label for="txtId" class="form-label text-white">ID</label>
+							<input type="text" class="form-control text-white btn-outline-secondary" style="background-color: #1a1d20;" id="txtId" required>
+						</div>
+						<div class="col-md-10">
+							<label for="txtNome" class="form-label text-white">Nome</label>
+							<input type="text" class="form-control text-white btn-outline-secondary" style="background-color: #1a1d20;" id="txtNome" required>
+							<div class="invalid-feedback">
+								Insira um nome.
+							</div>
+						</div>
+						<div class="col-md-12">
+							<label for="txtEndereco" class="form-label text-white">Endereço</label>
+							<input type="text" class="form-control text-white btn-outline-secondary" style="background-color: #1a1d20;" id="txtEndereco" required>
+							<div class="invalid-feedback">
+								Insira um endereço.
+							</div>
+						</div>
+						<div class="col-md-8">
+							<label for="txtEmail" class="form-label text-white">Email</label>
+							<input type="email" class="form-control text-white btn-outline-secondary" style="background-color: #1a1d20;" id="txtEmail" required>
+							<div class="invalid-feedback">
+								Insira um email válido.
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label for="txtTelefone" class="form-label text-white">Telefone</label>
+							<input type="tel" class="form-control text-white btn-outline-secondary" style="background-color: #1a1d20;" id="txtTelefone" required>
+							<div class="invalid-feedback">
+								Insira um telefone.
+							</div>
+						</div>
+						<div class="col-md-12 mt-4 text-center">
+							<input type="button" class="btn btn-primary" value="Novo" onclick="novoHospede()" id="btnNovo">
+							<input type="button" class="btn btn-success" value="Salvar" onclick="salvarHospede()" id="btnSalvar">
+							<input type="button" class="btn btn-danger" value="Apagar" onclick="apagarHospede()" id="btnApagar">
+							<input type="button" class="btn btn-warning" value="Cancelar" onclick="cancelarEdicao()" id="btnCancelar">
+						</div>
+					</form>
+					<div class="container text-center text-white">
+						<p style="font-weight:bold" id="paragrafoMensagem"></p>
+					</div>
+					<div class="container text-center text-white mt-5 pt-5">
+						<p style="color: #d1d1d1; font-size: 10px;">MackDorms&trade;</p>
+					</div>
+				</div>
+				<div class="col-md-8 ps-0 pe-0">
+					<table class="table table-striped">    
+						<tr class="table-secondary"> 
+							<th class="ps-3">ID</th> 
+							<th>Nome</th> 
+							<th>Endereço</th>
+							<th>Email</th>
+							<th>Telefone</th> 
+						</tr>
+						<tbody id="corpoTabelaHospedes"></tbody>
+					</table>
+				</div>
+			</div>
 		</div>
         
 	    <script>
@@ -88,6 +130,16 @@
 	            listarTodosHospedes();            
 	        }
 
+			function validarForm() {
+				var form = document.querySelector('form');
+				if (form.checkValidity()) {
+					return true;
+				} else {
+					form.classList.add('was-validated');
+					return false;
+				}
+			}
+
 	        async function listarTodosHospedes() {
 	            const URL = `/api/hospedes`;
 	            fetch(URL)
@@ -104,7 +156,7 @@
 	            for (var i = 0; i < n; i++) {
 	                var f = hospedes[i];
 	                linhasTabela += 
-	                	`<tr><td><a href="javascript:void(0)" onclick="selecionarHospede('${f.id}','${f.nome}','${f.endereco}','${f.email}','${f.telefone}')">` 
+	                	`<tr><td class="ps-3"><a href="javascript:void(0)" onclick="selecionarHospede('${f.id}','${f.nome}','${f.endereco}','${f.email}','${f.telefone}')">` 
 	                    + f.id     + '</a></td>' + 
 	                    '<td>' + f.nome   + '</td>' +
 	                    '<td>' + f.endereco + '</td>' +
@@ -158,6 +210,11 @@
 	        }
 	        
 	        function salvarHospede() {
+
+				if(!validarForm()) {
+					return;
+				}
+
 	        	if (criandoNovoHospede) {
 	        		criarHospede();
 	        	}
@@ -167,6 +224,7 @@
 	        }
 	        
 	        async function criarHospede() {
+
 	        	const URL = `/api/hospedes`;
 	        	const dadosHospede = {
 	        		'nome': txtNome.value,
