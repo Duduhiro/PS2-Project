@@ -3,8 +3,8 @@ body, html {
 }
 
 a {
-    color: #000;
-    text-decoration: none;
+    color: white;
+    text-decoration: underline;
 }
 
 a:visited {
