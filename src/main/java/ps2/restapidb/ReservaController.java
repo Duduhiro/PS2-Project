@@ -35,7 +35,7 @@ public class ReservaController {
 		return createdRes;
 	}
 	
-	@PutMapping("/api/reservas/{reservasId}")
+	@PutMapping("/api/reservas/{reservaId}")
 	Optional<Reserva> updateReserva(@RequestBody Reserva reservaReq, @PathVariable long reservaId) {
 		Optional<Reserva> opt = reservaRepo.findById(reservaId);
 		if (opt.isPresent()) {
