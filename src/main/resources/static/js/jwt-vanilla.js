@@ -1,8 +1,23 @@
+var userElement = document.getElementById('username');
+var passwordElement = document.getElementById('password');
+
+userElement.addEventListener('keypress', function(event) {
+	if (event.key === 'Enter') {
+		event.preventDefault();
+		getToken();
+	}
+});
+
+passwordElement.addEventListener('keypress', function(event) {
+	if (event.key === 'Enter') {
+		event.preventDefault();
+		getToken();
+	}
+});
+
 function getToken() {
 	var loginUrl = "/authenticate"
 	var xhr = new XMLHttpRequest();
-	var userElement = document.getElementById('username');
-	var passwordElement = document.getElementById('password');
     var message = document.getElementById('loginError');
 	var user = userElement.value;
 	var password = passwordElement.value;
@@ -14,6 +29,7 @@ function getToken() {
 		console.log(responseObject);
 		if (responseObject.token) {
 			localStorage.setItem('token', responseObject.token);
+			localStorage.setItem('username', user);
 			window.location.replace("/auth.html");
 		} else {
 			userElement.classList.add('is-invalid');

@@ -132,6 +132,7 @@
 							<th>Check-out</th>
 							<th>Valor</th>
 							<th>Hóspede</th>
+							<th>Responsável</th>
 						</tr>
 						<tbody id="corpoTabelaReservas"></tbody>
 					</table>
@@ -280,7 +281,8 @@
 	                    '<td>' + cin + '</td>' +
 	                    '<td>' + cout + '</td>' +
 	                    '<td>R$ ' + f.valorReserva.toLocaleString('pt-BR') + ',00</td>' +
-	                    '<td><a href="./hospedes.html">' + f.hospede.id + ' - ' + f.hospede.nome + '</a></td> </tr>\n';
+	                    '<td><a href="./hospedes.html">' + f.hospede.id + ' - ' + f.hospede.nome + '</a></td>' + 
+						'<td>' + f.user + '</td></tr>\n';
 	            }
 	            corpoTabela.innerHTML = linhasTabela;
 	        }
@@ -349,7 +351,8 @@
 	        		'dataCheckIn': txtCheckIn.value,
 					'dataCheckOut': txtCheckOut.value,
 					'valorReserva': txtValor.value,
-					'hospede': {'id': txtHospede.value}
+					'hospede': {'id': txtHospede.value},
+					'user': localStorage.getItem('username')
 	        	};
 	        	const postRequest = {
 	        		method: 'POST',
@@ -372,7 +375,8 @@
 	        		'dataCheckIn': txtCheckIn.value,
 					'dataCheckOut': txtCheckOut.value,
 					'valorReserva': txtValor.value,
-					'hospede': {'id': txtHospede.value}
+					'hospede': {'id': txtHospede.value},
+					'user': localStorage.getItem('username')
 	        	};
 	        	const putRequest = {
 	        		method: 'PUT',

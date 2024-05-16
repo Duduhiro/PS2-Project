@@ -45,6 +45,20 @@
             var userElement = document.getElementById('username');
             var passwordElement = document.getElementById('password');
 
+            userElement.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    cadastrar();
+                }
+            })
+
+            passwordElement.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    cadastrar();
+                }
+            })
+
             async function cadastrar() {
                 fetch('/register', {
                     method: 'POST',

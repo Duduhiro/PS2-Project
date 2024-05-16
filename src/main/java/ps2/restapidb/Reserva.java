@@ -10,6 +10,7 @@ public class Reserva {
 	private String dataCheckIn;
 	private String dataCheckOut;
 	private double valorReserva;
+	private String userResponsavel;
 	
 	@ManyToOne(fetch=FetchType.EAGER, optional=false)
 	private Hospede hospede;
@@ -47,6 +48,12 @@ public class Reserva {
 	}
 	public void setHospede(Hospede hospede) {
 		this.hospede = hospede;
+	}
+	public String getUser() {
+		return userResponsavel;
+	}
+	public void setUser(String user) {
+		this.userResponsavel = user;
 	}
 
 }
